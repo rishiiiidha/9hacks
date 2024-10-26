@@ -4,9 +4,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function HomeScreen() {
   const projects = [
+    { name: "NextGen App", owner: "Lokesh", description: "An app built with Flutter to provide health monitoring solutions." },
+    { name: "Project X", owner: "Kanakaraj", description: "An innovative project using AI to analyze market trends." },
     { name: "MetaBot", owner: "Aditya Gurram", description: "This project creates custom chat bots using prompts for SMPs, using React, Django, FAST API, and Gemini API." },
-    { name: "Project X", owner: "Jane Doe", description: "An innovative project using AI to analyze market trends." },
-    { name: "NextGen App", owner: "John Smith", description: "An app built with Flutter to provide health monitoring solutions." },
   ];
 
   return (

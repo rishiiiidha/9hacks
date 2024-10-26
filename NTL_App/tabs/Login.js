@@ -28,7 +28,6 @@ export default function LoginScreen({ onLogin }) {
     }
 
     const handleLogin = () => {
-        // Hardcoded credentials for now
         const validUsername = "a";
         const validPassword = "123";
         const validUsername2 = "b";
@@ -115,7 +114,8 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontFamily:'Poppins_600SemiBold',
         marginTop:12,
-        marginLeft:20,
+ 
+        marginLeft:9,
     },
     input: {
         width:'100%',

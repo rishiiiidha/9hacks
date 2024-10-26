@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, Button, ActivityIndicator } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; // Make sure to install this package
+import { FontAwesome } from '@expo/vector-icons'; 
 
 export default function InsightsScreen() {
     const [selectedMonth, setSelectedMonth] = useState(null);
@@ -10,11 +10,9 @@ export default function InsightsScreen() {
 
     const months = ['September', 'November', 'January'];
 
-    // Function to fetch data for the selected month from the API
     const fetchMonthData = async (month) => {
         setLoading(true);
         try {
-            // Hardcoded data for August
             if (month === 'September') {
                 const hardcodedData = {
                     review: "Have a increasing learning curve, maintain that and also...",
@@ -23,7 +21,6 @@ export default function InsightsScreen() {
                 };
                 setMonthData(hardcodedData);
             } else {
-                // Fetch data for other months
                 const response = await fetch(`https://example.com/api/data?month=${month}`);
                 if (response.ok) {
                     const data = await response.json();
@@ -40,7 +37,6 @@ export default function InsightsScreen() {
         }
     };
 
-    // Trigger the data fetch when a month is selected
     const handleMonthPress = (month) => {
         setSelectedMonth(month);
         setModalVisible(true);

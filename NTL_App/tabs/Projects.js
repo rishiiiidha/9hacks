@@ -1,15 +1,32 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, ScrollView, Alert, BackHandler } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Alert } from 'react-native';
 
 export default function ProjectInfoUpload() {
     const [projectName, setProjectName] = useState('');
     const [gitHubLink, setGitHubLink] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
-    const [hasProjects, setHasProjects] = useState(false); // Tracks if a project exists
-    const [showForm, setShowForm] = useState(false); // Toggles form visibility
+    const [hasProjects, setHasProjects] = useState(false); 
+    const [showForm, setShowForm] = useState(false); 
+    const [submittedProject, setSubmittedProject] = useState(null);
+
+    useEffect(() => {
+       
+        const backAction = () => {
+            if (submittedProject && !showForm) {
+                // If a project is submitted and form is not visible, go back to form
+                setShowForm(true);
+                setSubmittedProject(null); // Reset to prepare for a new project submission
+                return true; // Prevent default back action
+            }
+            return false; // Allow default back action
+        };
+
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+        return () => backHandler.remove();
+    }, [submittedProject, showForm]);
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -49,14 +66,17 @@ export default function ProjectInfoUpload() {
 
             Alert.alert("Success", "Project submitted successfully!");
 
-            // Reset the fields after successful submission
+            setSubmittedProject({
+                project_name: projectName,
+                project_link: gitHubLink,
+                project_description: description,
+                image: image
+            });
+
             setProjectName('');
             setGitHubLink('');
             setDescription('');
-            setImage(null); // Reset the image
-    
-            setHasProjects(true);
-            setShowForm(false);
+            setImage(null);
             setHasProjects(true);
             setShowForm(false);
         } catch (error) {
@@ -117,18 +137,21 @@ export default function ProjectInfoUpload() {
                     </TouchableOpacity>
                 </>
             ) : (
-                // Display the created project after submission
-                <View style={styles.projectContainer}>
-                    <Text style={styles.projectText}>Project Name: {projectName}</Text>
-                    <Text style={styles.projectText}>GitHub Link: {gitHubLink}</Text>
-                    <Text style={styles.projectText}>Description: {description}</Text>
-                    {image && <Image source={{ uri: image }} style={styles.imagePreviewSmall} />}
-                    <Button title="Create Another Project" onPress={() => setShowForm(true)} color="#000" />
-                </View>
+                submittedProject && (
+                    <View style={styles.projectContainer}>
+                        <Text style={styles.projectText}>Project Name: {submittedProject.project_name}</Text>
+                        <Text style={styles.projectText}>GitHub Link: {submittedProject.project_link}</Text>
+                        <Text style={styles.projectText}>Description: {submittedProject.project_description}</Text>
+                        {submittedProject.image && <Image source={{ uri: submittedProject.image }} style={styles.imagePreviewSmall} />}
+                        <Button title="Create Another Project" onPress={() => setShowForm(true)} color="#000" />
+                    </View>
+                )
             )}
         </ScrollView>
     );
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
